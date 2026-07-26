@@ -14,7 +14,7 @@ app.add_middleware(
 )
 
 client = MongoClient(os.environ["MONGO_URI"])
-db = client["ISIS2304A02202619"]  # mismo patrón que tu taller, ajusta al nombre real de tu BD
+db = client["ISIS2304A02202619"] 
 
 @app.get("/")
 def inicio():
@@ -29,7 +29,7 @@ def post_reporte(habitacion_id: str, datos: dict):
     resultado = db["reportes"].insert_one(datos)
     return {'mensaje': 'Reporte guardado', 'id': str(resultado.inserted_id)}
 
-# RF4 - Consultar reportes de una habitación (historial, paginado, más reciente primero)
+# RF4 - Consultar reportes de una habitación 
 @app.get('/habitaciones/{habitacion_id}/reportes')
 def get_reportes(habitacion_id: str, pagina: int = 1, tamano: int = 10):
     skip = (pagina - 1) * tamano
