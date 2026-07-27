@@ -25,7 +25,7 @@ def inicio():
 @app.post('/habitaciones/{habitacion_id}/reportes')
 def post_reporte(habitacion_id: str, datos: dict):
     datos['idHabitacion'] = habitacion_id
-    datos['fecha_creacion'] = datetime.now().isoformat()
+    datos['fecha'] = datetime.now()
     datos.setdefault('critico', False)
     resultado = db["Reportes"].insert_one(datos)
     return {'mensaje': 'Reporte guardado', 'id': str(resultado.inserted_id)}
@@ -37,7 +37,7 @@ def get_reportes(habitacion_id: str, pagina: int = 1, tamano: int = 10):
     reportes = list(
         db["Reportes"]
         .find({"idHabitacion": habitacion_id})
-        .sort("fecha_creacion", -1)
+        .sort("fecha", -1)
         .skip(skip)
         .limit(tamano)
     )
@@ -51,12 +51,3 @@ def get_reporte(reporte_id: str):
     if reporte:
         reporte["_id"] = str(reporte["_id"])
     return reporte
-
-@app.put('/reportes/{reporte_id}')
-def put_reporte(reporte_id: str, datos: dict):
-    datos["fecha_modificacion"] = datetime.now().isoformat()
-    resultado = db["Reportes"].update_one(
-        {"_id": ObjectId(reporte_id)},
-        {"$set": datos}
-    )
-    return {"mensaje": "Reporte actualizado", "modificados": resultado.modified_count}
