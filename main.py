@@ -15,7 +15,7 @@ app.add_middleware(
 )
 
 client = MongoClient(os.environ["MONGO_URI"])
-db = client["ISIS2304A02202619"] 
+db = client["ISIS2304A02202619"]
 
 @app.get("/")
 def inicio():
@@ -27,15 +27,15 @@ def post_reporte(habitacion_id: str, datos: dict):
     datos['idHabitacion'] = habitacion_id
     datos['fecha_creacion'] = datetime.now().isoformat()
     datos.setdefault('critico', False)
-    resultado = db["reportes"].insert_one(datos)
+    resultado = db["Reportes"].insert_one(datos)
     return {'mensaje': 'Reporte guardado', 'id': str(resultado.inserted_id)}
 
-# RF4 - Consultar reportes de una habitación 
+# RF4 - Consultar reportes de una habitación
 @app.get('/habitaciones/{habitacion_id}/reportes')
 def get_reportes(habitacion_id: str, pagina: int = 1, tamano: int = 10):
     skip = (pagina - 1) * tamano
     reportes = list(
-        db["reportes"]
+        db["Reportes"]
         .find({"idHabitacion": habitacion_id})
         .sort("fecha_creacion", -1)
         .skip(skip)
