@@ -165,8 +165,6 @@ def put_conformidad(reporte_id: str, datos: dict):
     campos = {"conformidad": conformidad}
     if conformidad == False:
         campos["motivoInconformidad"] = datos["motivoInconformidad"]
-    else:
-        campos["motivoInconformidad"] = None
  
     db["Reportes"].update_one(
         {"_id": ObjectId(reporte_id)},
