@@ -24,9 +24,10 @@ def inicio():
 # RF1 - Crear reporte
 @app.post('/habitaciones/{habitacion_id}/reportes')
 def post_reporte(habitacion_id: str, datos: dict):
-    datos['idHabitacion'] = habitacion_id
-    datos['fecha'] = datetime.now()
+    datos['idHabitacion'] = int(habitacion_id)
+    datos['fecha'] = datetime.now()   #(punto 4)
     datos.setdefault('critico', False)
+    datos.setdefault('conformidad', None)
     resultado = db["Reportes"].insert_one(datos)
     return {'mensaje': 'Reporte guardado', 'id': str(resultado.inserted_id)}
 
