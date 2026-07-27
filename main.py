@@ -43,3 +43,19 @@ def get_reportes(habitacion_id: str, pagina: int = 1, tamano: int = 10):
     for r in reportes:
         r["_id"] = str(r["_id"])
     return reportes
+
+@app.get('/reportes/{reporte_id}')
+def get_reporte(reporte_id: str):
+    reporte = db["Reportes"].find_one({"_id": ObjectId(reporte_id)})
+    if reporte:
+        reporte["_id"] = str(reporte["_id"])
+    return reporte
+
+@app.put('/reportes/{reporte_id}')
+def put_reporte(reporte_id: str, datos: dict):
+    datos["fecha_modificacion"] = datetime.now().isoformat()
+    resultado = db["Reportes"].update_one(
+        {"_id": ObjectId(reporte_id)},
+        {"$set": datos}
+    )
+    return {"mensaje": "Reporte actualizado", "modificados": resultado.modified_count}
