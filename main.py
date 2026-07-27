@@ -79,14 +79,13 @@ def delete_reporte(reporte_id: str, idPrestador: int):
     return {"mensaje": "Reporte eliminado"}
 
 
-
 # RF4 - Consultar reportes de una habitación
 @app.get('/habitaciones/{habitacion_id}/reportes')
 def get_reportes(habitacion_id: str, pagina: int = 1, tamano: int = 10):
     skip = (pagina - 1) * tamano
     reportes = list(
         db["Reportes"]
-        .find({"idHabitacion": habitacion_id})
+        .find({"idHabitacion": int(habitacion_id)})
         .sort("fecha", -1)
         .skip(skip)
         .limit(tamano)
