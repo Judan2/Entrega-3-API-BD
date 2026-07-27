@@ -25,7 +25,7 @@ def inicio():
 @app.post('/habitaciones/{habitacion_id}/reportes')
 def post_reporte(habitacion_id: str, datos: dict):
     datos['idHabitacion'] = habitacion_id
-    datos['fecha'] = datetime.now().isoformat()
+    datos['fecha'] = datetime.now()
     datos.setdefault('critico', False)
     resultado = db["Reportes"].insert_one(datos)
     return {'mensaje': 'Reporte guardado', 'id': str(resultado.inserted_id)}
